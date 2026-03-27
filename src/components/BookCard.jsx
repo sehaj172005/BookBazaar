@@ -19,81 +19,88 @@ export default function BookCard({ book, index = 0 }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
-      whileHover={{ y: -8 }}
+      transition={{ duration: 0.5, delay: index * 0.05 }}
+      whileHover={{ y: -10 }}
       className="group"
     >
       <Link href={`/book/${book._id}`} className="block h-full">
-        <div className="card-saas h-full flex flex-col overflow-hidden bg-white">
+        <div className="card-premium h-full flex flex-col overflow-hidden bg-white group-hover:bg-indigo-50/5 transition-colors">
           
           {/* Image Container */}
-          <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
+          <div className="relative aspect-[3/4.2] overflow-hidden bg-slate-50 border-b border-slate-100">
             <Image
               src={imgError ? "/placeholder-book.png" : getImageUrl(book.images?.[0])}
               alt={book.title || "Book Cover"}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
+              className="object-cover transition-transform duration-1000 group-hover:scale-110"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
               onError={() => setImgError(true)}
               unoptimized
             />
             
             {/* Badges Overlay */}
-            <div className="absolute top-3 inset-x-3 flex justify-between items-start pointer-events-none">
+            <div className="absolute top-4 inset-x-4 flex justify-between items-start pointer-events-none">
                <div className="flex flex-col gap-2">
                   {book.isSold ? (
-                    <span className="bg-gray-900/90 backdrop-blur-md text-white text-[8px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest shadow-lg">Sold</span>
+                    <span className="bg-slate-900 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-xl">Sold</span>
                   ) : (
-                    <span className="bg-white/90 backdrop-blur-md text-indigo-600 text-[8px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest shadow-sm border border-indigo-50">
+                    <span className="bg-white/80 backdrop-blur-md text-indigo-600 text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm border border-white/40">
                        {book.category || "Book"}
                     </span>
                   )}
                </div>
                
                {discount > 0 && !book.isSold && (
-                 <span className="bg-indigo-600 text-white text-[10px] font-black px-2.5 py-1 rounded-xl shadow-xl shadow-indigo-100 italic">
+                 <span className="bg-indigo-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-xl shadow-xl shadow-indigo-200">
                     -{discount}%
                  </span>
                )}
             </div>
 
-            {/* Bottom Info Gradient */}
-            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            
-            <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-               <div className="w-10 h-10 rounded-xl bg-white/90 backdrop-blur-md flex items-center justify-center text-indigo-600 shadow-xl">
-                  <ArrowRight size={18} />
+            {/* Price Hover Preview */}
+            <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 duration-300">
+               <div className="glass-premium rounded-2xl p-3 flex items-center justify-between shadow-lg">
+                  <span className="text-sm font-black text-slate-900">₹{book.price}</span>
+                  <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
+                     <ArrowRight size={14} />
+                  </div>
                </div>
             </div>
           </div>
 
           {/* Content Area */}
-          <div className="p-5 flex-1 flex flex-col">
-            <div className="flex items-center gap-1.5 mb-2">
-               <span className={`w-2 h-2 rounded-full ${book.condition === "Like New" ? "bg-emerald-500" : "bg-amber-400"}`} />
-               <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Condition: {book.condition}</span>
+          <div className="p-6 flex-1 flex flex-col">
+            <div className="flex items-center gap-2 mb-3">
+               <div className="flex items-center gap-1 text-slate-400">
+                  <Eye size={12} />
+                  <span className="text-[10px] font-bold">{book.views || 0}</span>
+               </div>
+               <div className="w-1 h-1 bg-slate-200 rounded-full" />
+               <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider ${
+                 book.condition === "Like New" 
+                   ? "bg-emerald-50 text-emerald-600" 
+                   : "bg-amber-50 text-amber-600"
+               }`}>
+                 {book.condition}
+               </span>
             </div>
             
-            <h3 className="text-sm md:text-base font-black text-gray-900 leading-tight mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+            <h3 className="text-base font-black text-slate-900 leading-tight mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors tracking-tight">
               {book.title}
             </h3>
-            <p className="text-[11px] text-gray-400 font-bold uppercase tracking-tight mb-4">By {book.author || "Global Author"}</p>
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-tight mb-6">By {book.author || "Global Author"}</p>
 
-            <div className="mt-auto pt-4 border-t border-gray-50 flex items-end justify-between">
-               <div>
-                  <p className="text-[9px] font-black text-gray-300 uppercase tracking-widest leading-none mb-1">Price</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-black text-indigo-600 tracking-tighter">₹{book.price}</span>
-                    {book.mrp && <span className="text-xs text-gray-300 line-through font-bold">₹{book.mrp}</span>}
-                  </div>
+            <div className="mt-auto pt-5 border-t border-slate-50 flex items-center justify-between">
+               <div className="flex items-baseline gap-2">
+                 <span className="text-2xl font-black text-indigo-600 tracking-tighter">₹{book.price}</span>
+                 {book.mrp && <span className="text-sm text-slate-300 line-through font-bold">₹{book.mrp}</span>}
                </div>
                
-               <div className="flex flex-col items-end gap-1">
-                  <div className="flex items-center gap-1 text-[9px] font-black text-gray-400">
-                     <Eye size={10} /> {book.views || 0} views
-                  </div>
-                  {book.seller?.verified && <SellerBadge seller={book.seller} size="icon" />}
-               </div>
+               {book.seller?.verified && (
+                 <div className="transition-transform group-hover:scale-110">
+                    <SellerBadge seller={book.seller} size="icon" />
+                 </div>
+               )}
             </div>
           </div>
         </div>

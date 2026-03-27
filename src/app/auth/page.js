@@ -34,153 +34,171 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center bg-hero-gradient px-6 py-20 overflow-hidden">
-      {/* Mesh Background Decorations */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-200/50 rounded-full blur-[120px] -mr-20 -mt-20" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-200/30 rounded-full blur-[100px] -ml-20 -mb-20" />
+    <div className="min-h-screen relative flex items-center justify-center bg-mesh px-6 py-20 overflow-hidden font-sans">
       
-      <div className="w-full max-w-xl relative z-10 flex flex-col md:flex-row gap-8 items-center md:items-stretch">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] animate-float-slow" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[130px] animate-pulse" />
+      
+      <div className="w-full max-w-6xl relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
-        {/* Left Side: Brand Story (Visible on Desktop) */}
-        <div className="hidden md:flex flex-1 flex-col justify-center text-gray-900">
-           <div className="w-14 h-14 rounded-2xl bg-white backdrop-blur-xl border border-gray-100 flex items-center justify-center mb-10 shadow-xl">
-              <Sparkles className="w-8 h-8 text-indigo-600" />
-           </div>
-           <h1 className="text-6xl font-black tracking-tighter leading-[0.9] mb-6">
-             Your Campus, <br />
-             <span className="text-indigo-600">Marketplace.</span>
-           </h1>
-           <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-gray-100 shadow-sm">
-                    <ShieldCheck size={20} className="text-indigo-600" />
-                 </div>
-                 <p className="text-sm font-bold text-gray-600 uppercase tracking-widest">Verified Students Only</p>
-              </div>
-              <div className="flex items-center gap-4">
-                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-gray-100 shadow-sm">
-                    <Zap size={20} className="text-amber-500" />
-                 </div>
-                 <p className="text-sm font-bold text-gray-600 uppercase tracking-widest">Instant Negotiating</p>
-              </div>
-           </div>
-        </div>
-
-        {/* Right Side: Auth Card */}
+        {/* Left Side: Impactful Branding */}
         <motion.div 
-           initial={{ opacity: 0, x: 20 }}
+           initial={{ opacity: 0, x: -30 }}
            animate={{ opacity: 1, x: 0 }}
-           className="w-full max-w-md bg-white rounded-[40px] p-8 md:p-12 shadow-[0_40px_100px_rgba(0,0,0,0.1)] border border-gray-100"
+           transition={{ duration: 0.8 }}
+           className="hidden lg:flex flex-col justify-center text-gray-900 pr-12"
         >
-          <div className="text-center md:text-left mb-10">
-            <h2 className="text-3xl font-black text-gray-900 tracking-tighter">
-              {isLogin ? "Welcome Back" : "Crete Account"}
-            </h2>
-            <p className="text-gray-400 mt-1.5 font-medium">
-              {isLogin ? "Sign in to manage your listings" : "Start your selling journey today"}
-            </p>
-          </div>
+           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 backdrop-blur-md border border-white/20 text-indigo-600 text-xs font-black tracking-widest uppercase mb-12 shadow-sm w-fit">
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span>Sustainable Campus Trading</span>
+           </div>
+           
+           <h1 className="text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] mb-8 text-slate-900">
+             Student<br />
+             <span className="text-gradient">Marketplace.</span>
+           </h1>
+           
+           <p className="text-xl text-slate-500 font-medium mb-12 leading-relaxed max-w-md">
+             Join thousands of students buying and selling textbooks with verified peers securely.
+           </p>
 
-          <div className="bg-gray-50 rounded-2xl p-1.5 flex mb-8">
-            <button
-              onClick={() => setIsLogin(true)}
-              className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${
-                isLogin ? "bg-white text-indigo-600 shadow-sm" : "text-gray-400"
-              }`}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setIsLogin(false)}
-              className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${
-                !isLogin ? "bg-white text-indigo-600 shadow-sm" : "text-gray-400"
-              }`}
-            >
-              Join
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <AnimatePresence mode="wait">
-              {!isLogin && (
-                <motion.div 
-                  key="reg-field"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="space-y-2"
-                >
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Sehajdeep Singh"
-                      className="w-full h-15 pl-12 pr-4 bg-gray-50 border-none rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-bold shadow-inner"
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">University Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="student@university.edu"
-                  className="w-full h-15 pl-12 pr-4 bg-gray-50 border-none rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-bold shadow-inner"
-                />
+           <div className="grid grid-cols-2 gap-6">
+              <div className="p-6 rounded-[2rem] bg-white/40 border border-white/60 shadow-sm transition-transform hover:scale-105">
+                 <ShieldCheck size={32} className="text-indigo-600 mb-4" />
+                 <p className="text-sm font-black text-slate-900 uppercase tracking-tight">Zero Frauds</p>
+                 <p className="text-xs font-medium text-slate-400 mt-1">University Verified</p>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Secure Password</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                <input
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="••••••••"
-                  className="w-full h-15 pl-12 pr-4 bg-gray-50 border-none rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-bold shadow-inner"
-                />
+              <div className="p-6 rounded-[2rem] bg-white/40 border border-white/60 shadow-sm transition-transform hover:scale-105">
+                 <Zap size={32} className="text-amber-500 mb-4" />
+                 <p className="text-sm font-black text-slate-900 uppercase tracking-tight">Fast Deals</p>
+                 <p className="text-xs font-medium text-slate-400 mt-1">Instant Chat</p>
               </div>
-            </div>
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full h-16 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[24px] text-lg font-black shadow-2xl shadow-indigo-100 mt-4 transition-all hover:translate-y-[-2px] active:scale-[0.98]"
-            >
-              {loading ? (
-                <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Authenticating...
-                </div>
-              ) : (
-                <>
-                  {isLogin ? "Sign In to Bazaar" : "Start your Journey"}
-                  <ArrowRight className="w-5 h-5 ml-3" />
-                </>
-              )}
-            </Button>
-          </form>
-
-          <div className="mt-8 pt-8 border-t border-gray-50 text-center">
-             <p className="text-xs font-bold text-gray-300">
-               By continuing, you agree to our <span className="text-indigo-400">Terms</span> and <span className="text-indigo-400">Community Policy</span>.
-             </p>
-          </div>
+           </div>
         </motion.div>
+
+        {/* Right Side: Glassmorphism Auth Card */}
+        <div className="flex justify-center lg:justify-end">
+          <motion.div 
+             initial={{ opacity: 0, scale: 0.95 }}
+             animate={{ opacity: 1, scale: 1 }}
+             transition={{ duration: 0.5, delay: 0.2 }}
+             className="w-full max-w-md glass-premium rounded-[3rem] p-8 md:p-12 relative overflow-hidden"
+          >
+            {/* Glossy Overlay */}
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+            
+            <div className="text-center mb-10">
+              <h2 className="text-4xl font-black text-slate-900 tracking-tighter">
+                {isLogin ? "Welcome Back" : "Join the Loop"}
+              </h2>
+              <p className="text-slate-500 mt-2 font-medium">
+                {isLogin ? "Sign in to access your dashboard" : "Create your student account today"}
+              </p>
+            </div>
+
+            <div className="bg-slate-900/5 backdrop-blur-md rounded-[20px] p-1.5 flex mb-8">
+              <button
+                onClick={() => setIsLogin(true)}
+                className={`flex-1 py-3.5 text-xs font-black uppercase tracking-widest rounded-[14px] transition-all duration-300 ${
+                  isLogin ? "bg-white text-indigo-600 shadow-xl shadow-indigo-500/10" : "text-slate-400 hover:text-slate-600"
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => setIsLogin(false)}
+                className={`flex-1 py-3.5 text-xs font-black uppercase tracking-widest rounded-[14px] transition-all duration-300 ${
+                  !isLogin ? "bg-white text-indigo-600 shadow-xl shadow-indigo-500/10" : "text-slate-400 hover:text-slate-600"
+                }`}
+              >
+                Register
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <AnimatePresence mode="wait">
+                {!isLogin && (
+                  <motion.div 
+                    key="reg-field"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-2"
+                  >
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Full Campus Name</label>
+                    <div className="relative group">
+                      <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="John Doe"
+                        className="w-full h-16 pl-14 pr-6 bg-white/50 border border-white/80 rounded-2xl focus:bg-white focus:ring-8 focus:ring-indigo-500/5 focus:border-indigo-100 transition-all text-sm font-bold shadow-inner outline-none"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">University Email</label>
+                <div className="relative group">
+                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="student@edu.in"
+                    className="w-full h-16 pl-14 pr-6 bg-white/50 border border-white/80 rounded-2xl focus:bg-white focus:ring-8 focus:ring-indigo-500/5 focus:border-indigo-100 transition-all text-sm font-bold shadow-inner outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Secure Gateway</label>
+                <div className="relative group">
+                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                  <input
+                    type="password"
+                    required
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    placeholder="••••••••"
+                    className="w-full h-16 pl-14 pr-6 bg-white/50 border border-white/80 rounded-2xl focus:bg-white focus:ring-8 focus:ring-indigo-500/5 focus:border-indigo-100 transition-all text-sm font-bold shadow-inner outline-none"
+                  />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-18 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[24px] text-lg font-black shadow-xl shadow-indigo-200 mt-6 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3"
+              >
+                {loading ? (
+                  <>
+                    <span className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Verifying...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{isLogin ? "Sign In to Bazaar" : "Start your Journey"}</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-10 pt-8 border-t border-slate-100/50 text-center">
+               <p className="text-[11px] font-bold text-slate-300 uppercase tracking-widest leading-relaxed">
+                 By continuing, you agree to our <br />
+                 <span className="text-indigo-400 cursor-pointer hover:underline">Secure Trading Policies</span>
+               </p>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

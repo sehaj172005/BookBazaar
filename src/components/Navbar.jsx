@@ -31,81 +31,91 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur-xl border-b border-gray-100 py-2 shadow-sm" : "bg-white/80 backdrop-blur-md border-b border-gray-100 py-4"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "glass-premium py-2" : "bg-white/40 backdrop-blur-md border-b border-white/20 py-4"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group" onClick={() => setMobileMenuOpen(false)}>
-          <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200 group-hover:scale-105 transition-transform">
-            <span className="text-white font-black text-xl tracking-tighter">B!</span>
+          <div className="w-11 h-11 rounded-[1.25rem] bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 group-active:scale-95 transition-all relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent animate-pulse" />
+            <span className="text-white font-black text-xl tracking-tighter relative z-10">B!</span>
           </div>
-          <span className={`text-xl font-bold tracking-tight transition-colors text-gray-900`}>
-            Book<span className="text-indigo-600">Bazaar</span>
+          <span className="text-2xl font-black tracking-tighter text-slate-900">
+            Book<span className="text-gradient">Bazaar</span>
           </span>
         </Link>
 
-        {/* Desktop Search (Centered) */}
-        <div className="hidden md:flex flex-1 max-w-md mx-8">
+        {/* Desktop Search (Centered - Premium Glass) */}
+        <div className="hidden lg:flex flex-1 max-w-lg mx-12">
           <div className="relative w-full group">
-             <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400`} />
+             <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
              <input
                type="text"
-               placeholder="Search by title, author, or ISBN..."
-               className={`w-full h-11 pl-11 pr-4 rounded-2xl text-sm font-medium transition-all outline-none border focus:ring-4 bg-gray-50 border-gray-100 focus:bg-white focus:border-indigo-100 focus:ring-indigo-500/5 text-gray-900 placeholder:text-gray-400`}
+               placeholder="Search textbooks..."
+               className="w-full h-12 pl-12 pr-6 rounded-full text-sm font-bold transition-all outline-none border border-slate-100 bg-slate-50 focus:bg-white focus:border-indigo-100 focus:ring-8 focus:ring-indigo-500/5 text-slate-900 placeholder:text-slate-400"
              />
           </div>
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-2">
-
+        <div className="hidden md:flex items-center gap-4">
           {user ? (
-            <div className="flex items-center gap-3">
-              <Link href="/chat" className="relative flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-bold text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all group">
-                <div className="relative">
-                  <MessageCircle className="w-5 h-5 group-hover:fill-indigo-50" />
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
-                </div>
-                <span>Messages</span>
+            <div className="flex items-center gap-4">
+              <Link href="/chat" className="relative p-2.5 rounded-2xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all group">
+                <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white ring-2 ring-red-500/20" />
               </Link>
-              <Link href="/profile">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-200 ring-2 ring-white ring-offset-2 ring-offset-transparent">
-                  {user.avatar || user.name.charAt(0)}
+              
+              <Link href="/profile" className="flex items-center gap-3 pl-2 border-l border-slate-100 group">
+                <div className="w-11 h-11 rounded-[1.25rem] bg-gradient-to-br from-indigo-500 to-indigo-700 p-0.5 shadow-md shadow-indigo-100 group-hover:scale-105 transition-transform">
+                   <div className="w-full h-full bg-white rounded-[1.1rem] flex items-center justify-center font-black text-indigo-600 text-sm">
+                      {user.avatar || user.name.charAt(0)}
+                   </div>
                 </div>
               </Link>
+
               <Button
                 onClick={() => router.push("/sell")}
-                className="ml-2 h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-xl shadow-indigo-200 shadow-opacity-40 transition-all hover:translate-y-[-2px] active:translate-y-0"
+                className="h-12 px-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black shadow-xl shadow-indigo-500/10 hover:scale-105 transition-all"
               >
                 <PlusCircle className="w-4 h-4 mr-2" />
                 Sell Now
               </Button>
             </div>
           ) : (
-            <Button
-              onClick={() => router.push("/auth")}
-              className={`h-11 px-6 rounded-2xl font-bold transition-all bg-indigo-600 text-white shadow-xl shadow-indigo-100 hover:bg-indigo-700`}
-            >
-              Sign In
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                onClick={() => router.push("/auth")}
+                className="h-12 px-6 rounded-2xl font-black text-slate-600 hover:text-indigo-600"
+              >
+                Log In
+              </Button>
+              <Button
+                onClick={() => router.push("/auth")}
+                className="h-12 px-8 bg-slate-900 hover:bg-black text-white rounded-2xl font-black shadow-xl shadow-slate-200 transition-all hover:scale-105"
+              >
+                Join Now
+              </Button>
+            </div>
           )}
         </div>
 
-        {/* Mobile menu toggle */}
-        <div className="md:hidden flex items-center gap-4">
+        {/* Mobile items */}
+        <div className="md:hidden flex items-center gap-5">
            {user && (
              <Link href="/chat" className="relative p-1">
-                <MessageCircle className={`w-6 h-6 text-gray-800`} />
-               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
+                <MessageCircle className="w-7 h-7 text-slate-900" />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white shadow-sm" />
              </Link>
            )}
            <button 
              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-             className={`p-1 text-gray-800`}
+             className="w-10 h-10 flex items-center justify-center rounded-2xl bg-slate-50 text-slate-900"
            >
-             {mobileMenuOpen ? <X /> : <Menu />}
+             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
            </button>
         </div>
       </div>
@@ -114,28 +124,34 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-100 shadow-xl p-6 space-y-4 text-gray-900"
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="md:hidden absolute top-[calc(100%+10px)] left-4 right-4 glass-premium rounded-[2.5rem] p-8 space-y-6 shadow-2xl z-[100]"
           >
-            <Link href="/" className="block text-lg font-bold" onClick={() => setMobileMenuOpen(false)}>
-              Browse Books
-            </Link>
+            <div className="space-y-4">
+               <Link href="/" className="block text-2xl font-black text-slate-900 tracking-tight" onClick={() => setMobileMenuOpen(false)}>
+                 Marketplace
+               </Link>
+               <Link href="/chat" className="block text-xl font-bold text-slate-500" onClick={() => setMobileMenuOpen(false)}>
+                 Messages
+               </Link>
+               <Link href="/profile" className="block text-xl font-bold text-slate-500" onClick={() => setMobileMenuOpen(false)}>
+                 Dashboard
+               </Link>
+            </div>
+
             {!user ? (
-               <Button onClick={() => { router.push("/auth"); setMobileMenuOpen(false); }} className="w-full h-12 rounded-2xl bg-indigo-600 text-white font-bold mt-4">
+               <Button onClick={() => { router.push("/auth"); setMobileMenuOpen(false); }} className="w-full h-16 rounded-[1.5rem] bg-indigo-600 text-white font-black text-lg shadow-xl shadow-indigo-100">
                  Get Started
                </Button>
             ) : (
-              <div className="pt-4 border-t border-gray-100 flex flex-col gap-4">
-                <Link href="/profile" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-                   <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold">
-                     {user.name.charAt(0)}
-                   </div>
-                   <span className="font-bold">My Dashboard</span>
-                </Link>
-                <Button onClick={() => { logout(); setMobileMenuOpen(false); }} variant="outline" className="w-full h-12 rounded-2xl text-red-500 border-red-50">
-                   Logout
+              <div className="pt-6 border-t border-slate-100 flex flex-col gap-4">
+                <Button onClick={() => { router.push("/sell"); setMobileMenuOpen(false); }} className="w-full h-16 rounded-[1.5rem] bg-indigo-600 text-white font-black text-lg">
+                   List a Book
+                </Button>
+                <Button onClick={() => { logout(); setMobileMenuOpen(false); }} variant="outline" className="w-full h-14 rounded-[1.25rem] text-red-500 border-red-50 font-bold">
+                   Sign Out
                 </Button>
               </div>
             )}

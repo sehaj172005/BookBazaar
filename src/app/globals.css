@@ -48,36 +48,37 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 
   /* Custom palette with modern OKLCH approximations */
-  --color-indigo-50: oklch(0.97 0.01 264);
-  --color-indigo-100: oklch(0.95 0.02 264);
-  --color-indigo-200: oklch(0.9 0.04 264);
-  --color-indigo-500: oklch(0.6 0.18 264);
-  --color-indigo-600: oklch(0.5 0.2 264);
-  --color-indigo-700: oklch(0.4 0.18 264);
+  --color-indigo-50: oklch(0.98 0.01 260);
+  --color-indigo-100: oklch(0.96 0.03 260);
+  --color-indigo-200: oklch(0.92 0.06 260);
+  --color-indigo-500: oklch(0.65 0.18 260);
+  --color-indigo-600: oklch(0.55 0.22 260);
+  --color-indigo-700: oklch(0.45 0.2 260);
   
-  --color-emerald-500: oklch(0.7 0.18 160);
+  --color-emerald-500: oklch(0.75 0.15 160);
+  --color-amber-500: oklch(0.8 0.16 80);
 }
 
 :root {
-  --background: #fdfdff;
-  --foreground: #0f172a;
+  --background: #fcfdfe;
+  --foreground: #020617;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #020617;
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #4f46e5;
+  --popover-foreground: #020617;
+  --primary: #6366f1;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
+  --secondary: #f8fafc;
   --secondary-foreground: #0f172a;
   --muted: #f8fafc;
   --muted-foreground: #64748b;
-  --accent: #f8fafc;
+  --accent: #f1f5f9;
   --accent-foreground: #0f172a;
   --destructive: #ef4444;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #4f46e5;
-  --radius: 1.25rem;
+  --ring: #6366f1;
+  --radius: 1.5rem;
 }
 
 @layer base {
@@ -86,7 +87,7 @@
   }
   body {
     @apply bg-background text-foreground selection:bg-indigo-100 selection:text-indigo-900;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
     -webkit-font-smoothing: antialiased;
   }
   html {
@@ -108,53 +109,47 @@
   width: 100%;
 }
 
-/* On Desktop, adjust padding */
 @media (min-width: 768px) {
   .main-content {
-    padding-top: 100px;
-    max-width: 1280px;
-    margin: 0 auto;
+    padding-top: 90px;
   }
 }
 
-/* Scrollbar hiding utilities */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
 /* SaaS Aesthetic Components */
-.card-saas {
-  @apply bg-white rounded-3xl border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.02),0_10px_30px_rgba(0,0,0,0.04)] transition-all duration-300;
+.card-premium {
+  @apply bg-white rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500;
 }
-.card-saas:hover {
-  @apply shadow-[0_4px_12px_rgba(0,0,0,0.04),0_20px_50px_rgba(79,70,229,0.08)] -translate-y-1;
-}
-
-.glass-saas {
-  @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg;
+.card-premium:hover {
+  @apply shadow-[0_20px_60px_rgba(99,102,241,0.12)] -translate-y-1.5;
 }
 
-.text-hero {
-  @apply text-4xl lg:text-6xl font-black tracking-tighter leading-none text-gray-900;
+.glass-premium {
+  @apply bg-white/70 backdrop-blur-2xl border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
 }
 
-.bg-hero-gradient {
-  background-color: #f8fafc;
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-indigo-500 to-indigo-700;
+}
+
+.bg-mesh {
+  background-color: #fcfdfe;
   background-image: 
-    radial-gradient(ellipse at top left, rgba(79, 70, 229, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at top right, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom center, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
 }
 
 .bg-dot-pattern {
   background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
+  background-size: 32px 32px;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.02); }
 }
-.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
 
 /* Hide scrollbar but keep scroll functionality */
 .no-scrollbar::-webkit-scrollbar { display: none; }

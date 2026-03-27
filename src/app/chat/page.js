@@ -14,7 +14,9 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const SOCKET_URL = process.env.NODE_ENV === "production"
+  ? undefined // In production, connect to current origin
+  : (process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000");
 const socket = io(SOCKET_URL, { withCredentials: true });
 
 function ChatContent() {
@@ -157,7 +159,7 @@ function ChatContent() {
     );
   }
 
-  const filteredChats = chats.filter(c => {
+  const filteredChats = (Array.isArray(chats) ? chats : []).filter(c => {
     const other = c.buyer?._id === user?._id ? c.seller : c.buyer;
     return other?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
            c.book?.title?.toLowerCase().includes(searchQuery.toLowerCase());

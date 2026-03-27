@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const BASE_URL = process.env.NODE_ENV === "production" 
+  ? "/api" 
+  : `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000"}/api`;
 
 const API = axios.create({
   baseURL: BASE_URL,
@@ -36,14 +38,16 @@ API.interceptors.response.use(
   }
 );
 
-/**
- * Convert a relative /uploads/... path to a full URL pointing at the Express server.
- * Falls back to the placeholder if no path given.
- */
+const ROOT_URL = process.env.NODE_ENV === "production" 
+  ? "" 
+  : (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000");
+
 export const getImageUrl = (path) => {
   if (!path) return "/placeholder-book.png";
   if (path.startsWith("http")) return path; // already absolute
-  return `${BASE_URL}${path}`;
+  
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${ROOT_URL}${normalizedPath}`;
 };
 
 // ===================== AUTH =====================

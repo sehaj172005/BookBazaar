@@ -10,13 +10,19 @@ const compression = require("compression");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 
-dotenv.config();
+const next = require("next");
+
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+const dev = process.env.NODE_ENV !== "production";
+const nextApp = next({ dev, dir: path.join(__dirname, "../") });
+const handle = nextApp.getRequestHandler();
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: "*", // More flexible for unified origin
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
@@ -24,10 +30,19 @@ const io = new Server(server, {
 
 // Production security & logging
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  contentSecurityPolicy: false, // Disable CSP for combined dev/prod flexibility unless strictly needed
 }));
 app.use(compression());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+
+// Debug logging for routing
+app.use((req, res, next) => {
+  if (!req.url.startsWith("/_next") && !req.url.includes(".")) {
+    console.log(`🔍 [ROUTING] ${req.method} ${req.url}`);
+  }
+  next();
+});
 
 // Rate limiting (100 requests per 15 minutes)
 const limiter = rateLimit({
@@ -35,10 +50,10 @@ const limiter = rateLimit({
   max: 100,
   message: { message: "Too many requests from this IP, please try again after 15 minutes" }
 });
-app.use("/auth/", limiter); // Apply mostly to auth routes to prevent brute force
+app.use("/api/auth/", limiter); 
 
 // Middleware
-app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: true, credentials: true })); // Allow same origin easily
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -66,17 +81,22 @@ io.on("connection", (socket) => {
 // Static uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes
-app.use("/auth", require("./routes/auth"));
-app.use("/books", require("./routes/books"));
-app.use("/requests", require("./routes/requests"));
-app.use("/chat", require("./routes/chat"));
-app.use("/profile", require("./routes/profile"));
-app.use("/ai", require("./routes/ai"));
+// API Routes
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/books", require("./routes/books"));
+app.use("/api/requests", require("./routes/requests"));
+app.use("/api/chat", require("./routes/chat"));
+app.use("/api/profile", require("./routes/profile"));
+app.use("/api/ai", require("./routes/ai"));
 
-// Health check
-app.get("/", (req, res) => {
+// Health check API
+app.get("/api/health", (req, res) => {
   res.json({ message: "BookBazaar API running 🚀", status: "OK" });
+});
+
+// Next.js Catch-all (placed after all other routes)
+app.use((req, res) => {
+  return handle(req, res);
 });
 
 // Error handler
@@ -91,15 +111,17 @@ app.use((err, req, res, next) => {
 });
 
 // Connect DB + Start
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("✅ MongoDB connected");
-    server.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err.message);
-    process.exit(1);
-  });
+nextApp.prepare().then(() => {
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log("✅ MongoDB connected");
+      server.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+    })
+    .catch((err) => {
+      console.error("❌ MongoDB connection error:", err.message);
+      process.exit(1);
+    });
+});
