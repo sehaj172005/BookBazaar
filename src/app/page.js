@@ -12,7 +12,8 @@ async function fetchBooksData(searchParams) {
   const { category } = searchParams;
   // Use the production PORT assigned by Render, defaulting to 5000 for local dev
   const port = process.env.PORT || 5000;
-  let url = `${process.env.NEXT_PUBLIC_API_URL}/api/books`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `http://127.0.0.1:${process.env.PORT || 5000}`;
+  let url = `${baseUrl}/api/books`;
 
   console.log(`🔍 [SSR] Fetching books from internal URL: ${url}`);
 
