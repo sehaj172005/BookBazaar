@@ -1,10 +1,8 @@
 import axios from "axios";
 
-
-
 const API = axios.create({
   baseURL: "/api",
-  timeout: 30000,
+  timeout: 45000,
 });
 
 // Attach JWT token to every request
@@ -36,16 +34,12 @@ API.interceptors.response.use(
   }
 );
 
-const ROOT_URL = process.env.NODE_ENV === "production"
-  ? ""
-  : (process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:5000");
-
+// Handle image paths for absolute URLs (Cloudinary) or relative public paths
 export const getImageUrl = (path) => {
   if (!path) return "/placeholder-book.png";
-  if (path.startsWith("http")) return path; // already absolute
+  if (path.startsWith("http")) return path; // absolute Cloudinary URL
 
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return `${ROOT_URL}${normalizedPath}`;
+  return path.startsWith("/") ? path : `/${path}`; // public directory images
 };
 
 // ===================== AUTH =====================

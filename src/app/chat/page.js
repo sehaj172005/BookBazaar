@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
-import { io } from "socket.io-client";
+import { pusherClient } from "@/lib/pusher";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Send, Loader2, MessageSquare, Lock, CheckCircle2, SmilePlus,
@@ -13,11 +13,6 @@ import { getChats, getMessages, sendMessage, completeRequest, getImageUrl } from
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-
-const SOCKET_URL = process.env.NODE_ENV === "production"
-  ? undefined // In production, connect to current origin
-  : (process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000");
-const socket = io(SOCKET_URL, { withCredentials: true });
 
 function ChatContent() {
   const { user, loading: authLoading } = useAuth();
@@ -54,23 +49,23 @@ function ChatContent() {
     if (activeChat) {
       fetchMessages(activeChat._id);
       
-      socket.emit("join_chat", activeChat._id);
+      // Using Pusher for real-time
+      const channel = pusherClient.subscribe(activeChat._id);
       
       const handleReceive = (data) => {
         if (data.request === activeChat._id) {
           setMessagesList((prev) => {
             if (prev.find(m => m._id === data._id)) return prev;
-            // Also remove temp messages if they match the content exactly, 
-            // though fetching again handles most syncing.
             return [...prev, data];
           });
         }
       };
 
-      socket.on("receive_message", handleReceive);
+      channel.bind("receive_message", handleReceive);
 
       return () => {
-        socket.off("receive_message", handleReceive);
+        pusherClient.unsubscribe(activeChat._id);
+        channel.unbind("receive_message", handleReceive);
       };
     }
   }, [activeChat]);

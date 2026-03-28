@@ -11,12 +11,16 @@ import Link from "next/link";
 async function fetchBooksData(searchParams) {
   const { category } = searchParams;
   
-  // ⚡ INTERNAL PORT STRATEGY: 
-  // For SSR to talk to its own API on Render, it should use the internal port.
-  const port = process.env.PORT || 5000;
-  const url = `http://127.0.0.1:${port}/api/books`; 
+  // Resolve the dynamic API URL for Vercel vs Local
+  let baseUrl = "http://localhost:3000";
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  } else if (process.env.VERCEL_URL) {
+    baseUrl = `https://${process.env.VERCEL_URL}`;
+  }
   
-  console.log(`🔍 [SSR] Internal Fetch: ${url}`);
+  const url = `${baseUrl}/api/books`; 
+  console.log(`🔍 [SSR] Fetching from: ${url}`);
 
   const query = new URLSearchParams();
   if (category && category !== "all") {
