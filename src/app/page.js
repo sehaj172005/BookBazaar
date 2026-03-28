@@ -7,45 +7,37 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-// Server-side data fetching
+import connectDB from "@/lib/mongodb";
+import Book from "@/models/Book";
+
+// Server-side data fetching — direct DB query (no HTTP round-trip)
 async function fetchBooksData(searchParams) {
   const { category } = searchParams;
-  
-  // Resolve the dynamic API URL for Vercel vs Local
-  let baseUrl = "http://localhost:3000";
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  } else if (process.env.VERCEL_URL) {
-    baseUrl = `https://${process.env.VERCEL_URL}`;
-  }
-  
-  const url = `${baseUrl}/api/books`; 
-  console.log(`🔍 [SSR] Fetching from: ${url}`);
-
-  const query = new URLSearchParams();
-  if (category && category !== "all") {
-    if (category === "Bundles") {
-      query.append("isBundle", "true");
-    } else {
-      query.append("category", category);
-    }
-  }
 
   try {
-    const res = await fetch(`${url}?${query.toString()}`, {
-      next: { revalidate: 0 } // no-cache for dev demo
-    });
+    await connectDB();
 
-    if (!res.ok) {
-      console.error(`❌ [SSR] Fetch Failed: ${res.status} ${res.statusText}`);
-      return [];
+    let filter = { isSold: false };
+
+    if (category && category !== "all") {
+      if (category === "Bundles") {
+        filter.isBundle = true;
+      } else {
+        filter.category = { $regex: category, $options: "i" };
+      }
     }
-    const data = await res.json();
-    console.log(`✅ [SSR] Successfully fetched ${data.length} books!`);
-    return data;
+
+    const books = await Book.find(filter)
+      .populate("seller", "name avatar rating verified badge completedDeals")
+      .sort({ createdAt: -1 })
+      .lean(); // plain JS objects — safe to pass to client components
+
+    console.log(`✅ [SSR] Fetched ${books.length} books directly from DB`);
+    // Serialize ObjectIds to strings
+    return JSON.parse(JSON.stringify(books));
   } catch (error) {
-    console.error("❌ [SSR] Fetch Error:", error.message);
-    return []; // Return empty array so the page doesn't crash
+    console.error("❌ [SSR] DB Error:", error.message);
+    return [];
   }
 }
 
