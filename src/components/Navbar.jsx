@@ -39,7 +39,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2 group" onClick={() => setMobileMenuOpen(false)}>
 
           <span className="text-3xl font-black tracking-tighter text-slate-900">
-            Shelf<span className="text-gradient">Shift</span>
+            Re<span className="text-gradient">bound</span>
           </span>
         </Link>
 

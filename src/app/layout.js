@@ -13,15 +13,15 @@ const inter = Inter({
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
-  title: "ShelfShift — Premium Student Marketplace",
+  title: "Rebound — Premium Student Marketplace",
   description:
     "The modern second-hand book marketplace for university students. Secure, transparent, and student-powered. Buy and sell textbooks with ease.",
   keywords: "books, marketplace, university, student, second-hand, textbooks",
   openGraph: {
-    title: "ShelfShift — Premium Student Marketplace",
+    title: "Rebound — Premium Student Marketplace",
     description: "The modern second-hand book marketplace for university students.",
-    url: "https://shelfshift.vercel.app", // Placeholder for user's domain
-    siteName: "ShelfShift",
+    url: "https://rebound.vercel.app", // Placeholder for user's domain
+    siteName: "Rebound",
     images: [
       {
         url: "/og-image.png", // User would need to provide this

@@ -1,4 +1,4 @@
-# ShelfShift — Premium Student-to-Student Marketplace 📚✨
+# Rebound — Premium Student-to-Student Marketplace 📚✨
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind-4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
@@ -6,7 +6,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb)](https://www.mongodb.com/)
 [![Socket.io](https://img.shields.io/badge/Socket.io-Real--time-010101?logo=socket.io)](https://socket.io/)
 
-**ShelfShift** is a high-performance, unified SaaS marketplace designed specifically for students to buy, sell, and trade 2nd hand textbooks and study essentials. Built with a premium, glassmorphic UI and powered by AI, it bridges the gap between students through secure, local trading.
+**Rebound** is a high-performance, unified SaaS marketplace designed specifically for students to buy, sell, and trade 2nd hand textbooks and study essentials. Built with a premium, glassmorphic UI and powered by AI, it bridges the gap between students through secure, local trading.
 
 ---
 
