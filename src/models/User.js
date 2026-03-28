@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true, minlength: 6 },
-    avatar: { type: String, default: "" }, // initials e.g. "SS"
+    avatar: { type: String, default: "" },
     bio: { type: String, trim: true, default: "" },
     location: { type: String, trim: true, default: "" },
     rating: { type: Number, default: 0 },
@@ -18,19 +18,16 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Compare password helper
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Auto-generate avatar initials
 userSchema.pre("save", function () {
   if (this.isModified("name") || !this.avatar) {
     const parts = this.name.trim().split(/\s+/);
@@ -38,4 +35,5 @@ userSchema.pre("save", function () {
   }
 });
 
-module.exports = mongoose.model("User", userSchema);
+// Caching guard prevents OverwriteModelError on Next.js hot reload
+export default mongoose.models.User || mongoose.model("User", userSchema);

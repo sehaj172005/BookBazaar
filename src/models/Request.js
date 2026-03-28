@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const requestSchema = new mongoose.Schema(
   {
@@ -14,12 +14,11 @@ const requestSchema = new mongoose.Schema(
     completedAt: { type: Date, default: null },
     hasInitialMessage: { type: Boolean, default: false },
     sellerReplied: { type: Boolean, default: false },
-
   },
   { timestamps: true }
 );
 
-// Prevent duplicate requests from same buyer for same book
 requestSchema.index({ book: 1, buyer: 1 }, { unique: true });
 
-module.exports = mongoose.model("Request", requestSchema);
+// Caching guard prevents OverwriteModelError on Next.js hot reload
+export default mongoose.models.Request || mongoose.model("Request", requestSchema);

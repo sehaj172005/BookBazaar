@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const bookSchema = new mongoose.Schema(
   {
@@ -6,7 +6,7 @@ const bookSchema = new mongoose.Schema(
     author: { type: String, trim: true },
     price: { type: Number, required: true },
     mrp: { type: Number, required: true },
-    images: [{ type: String }], // URLs/paths
+    images: [{ type: String }],
     condition: { type: String, enum: ["Like New", "Good", "Poor"], required: true },
     demand: { type: String, enum: ["high", "medium", "low"], default: "medium" },
     category: {
@@ -28,7 +28,7 @@ const bookSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Full-text search index
 bookSchema.index({ title: "text", author: "text", category: "text" });
 
-module.exports = mongoose.model("Book", bookSchema);
+// Caching guard prevents OverwriteModelError on Next.js hot reload
+export default mongoose.models.Book || mongoose.model("Book", bookSchema);

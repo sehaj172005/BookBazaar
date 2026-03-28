@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const chatSchema = new mongoose.Schema(
   {
@@ -9,4 +9,5 @@ const chatSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Chat", chatSchema);
+// Caching guard prevents OverwriteModelError on Next.js hot reload
+export default mongoose.models.Chat || mongoose.model("Chat", chatSchema);
