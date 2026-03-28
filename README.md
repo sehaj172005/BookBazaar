@@ -1,99 +1,127 @@
-# Rebound — Premium Student-to-Student Marketplace 📚✨
+# Rebound — Premium 2nd Hand Book Marketplace 📚
 
-[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
-[![Tailwind CSS 4](https://img.shields.io/badge/Tailwind-4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![Express.js](https://img.shields.io/badge/Express-5-000000?logo=express)](https://expressjs.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb)](https://www.mongodb.com/)
-[![Socket.io](https://img.shields.io/badge/Socket.io-Real--time-010101?logo=socket.io)](https://socket.io/)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://vercel.com/)
+[![Pusher](https://img.shields.io/badge/Realtime-Pusher-ff69b4?logo=pusher)](https://pusher.com/)
+[![Cloudinary](https://img.shields.io/badge/Images-Cloudinary-blue?logo=cloudinary)](https://cloudinary.com/)
+[![Groq](https://img.shields.io/badge/AI-Groq%20Llama3-orange)](https://groq.com/)
 
-**Rebound** is a high-performance, unified SaaS marketplace designed specifically for students to buy, sell, and trade 2nd hand textbooks and study essentials. Built with a premium, glassmorphic UI and powered by AI, it bridges the gap between students through secure, local trading.
+**Rebound** is a serverless-first, full-stack Next.js student marketplace for buying and selling 2nd hand textbooks. It features AI-powered price suggestions, real-time chat, and a premium glassmorphic UI — deployed edge-ready on Vercel.
 
 ---
 
-## 🌟 Key Features
+## ✨ Features
 
-- **🚀 SSR Architecture**: Blazing fast initial loads and perfect SEO using Next.js 16 Server Components.
-- **🧠 AI-Powered Marketplace**: Smart price suggestions and book condition detection powered by the **Groq API**.
-- **⚡ Real-time Chat**: Connect with buyers and sellers instantly using **Socket.io** integration.
-- **💎 Premium UI/UX**: Sleek, responsive design featuring glassmorphism, Framer Motion animations, and a unified mobile navigation system.
-- **🛡️ Secure Peer-to-Peer**: Verified student listings and local meetup focused trading.
+- **📚 Book Listings** — Create, browse, and filter listings by category, condition, price and more
+- **🤖 AI Price Suggestions** — Groq Llama3 estimates a fair price based on title, condition, and category
+- **🔍 AI Smart Search** — Natural language search with automatic query correction
+- **🖼️ AI Condition Detection** — Auto-detect book condition from uploaded photos
+- **💬 Real-time Chat** — Instant messaging via Pusher between buyers and sellers
+- **🔒 JWT Auth** — Secure register/login with hashed passwords
+- **☁️ Cloudinary Images** — Persistent image uploads via Cloudinary (Vercel-compatible)
+- **📦 Bundle Listings** — Sell multiple books as a discounted bundle
+- **📱 Fully Responsive** — Premium mobile-first UI with Framer Motion animations
 
 ---
 
 ## 🛠️ Tech Stack
 
-### **Frontend**
-*   **Next.js 16** (App Router & Turbopack)
-*   **Tailwind CSS 4** (Modern Styling)
-*   **Framer Motion** (Subtle, high-end animations)
-*   **Lucide React** (Consistent iconography)
-*   **Sonner** (Premium notification toasts)
-
-### **Backend & Data**
-*   **Express.js** (Unified Custom Server)
-*   **MongoDB + Mongoose** (NoSQL Database)
-*   **Socket.io** (Real-time bidirectional communication)
-*   **Multer** (Robust image upload processing)
-*   **JWT** (Secure Authentication)
-
-### **Artificial Intelligence**
-*   **Groq API (Llama 3)**: Intelligent price prediction and Listing quality checks.
+| Layer | Technology |
+|---|---|
+| **Framework** | Next.js 16 (App Router, Turbopack, Server Components) |
+| **Styling** | Tailwind CSS 4 + Custom CSS (Glassmorphism) |
+| **Database** | MongoDB Atlas + Mongoose |
+| **Auth** | JWT (jsonwebtoken) + bcryptjs |
+| **Real-time** | Pusher (Channels) |
+| **Image Storage** | Cloudinary |
+| **AI** | Groq API (Llama 3) |
+| **Animations** | Framer Motion |
+| **Deployment** | Vercel (Serverless) |
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Prerequisites
-- Node.js 18+
-- MongoDB instance (Local or Atlas)
-- Groq Cloud API Key (for AI features)
+### 1. Clone & Install
 
-### 2. Installation
-Clone the repository and install dependencies:
 ```bash
 git clone https://github.com/sehaj172005/BookBazaar.git
-cd Book
+cd BookBazaar
 npm install
 ```
 
-### 3. Environment Setup
-Create a `.env` file in the **root** and the **backend** folder with the following:
+### 2. Environment Variables
+
+Create a `.env.local` file in the **root** of the project:
+
 ```env
-# Backend & API
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
+# MongoDB
+MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/BookBazaar
+
+# Auth
+JWT_SECRET=your_super_secret_jwt_key
+
+# Pusher (get from pusher.com)
+PUSHER_APP_ID=your_app_id
+NEXT_PUBLIC_PUSHER_KEY=your_key
+PUSHER_SECRET=your_secret
+NEXT_PUBLIC_PUSHER_CLUSTER=ap2
+
+# Cloudinary (get from cloudinary.com)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Groq AI (get from console.groq.com)
 GROQ_API_KEY=your_groq_key
-
-
-### 4. Running the Project
-Launch the **Unified Server** (starts both API and Next.js):
-```bash
-npm start
 ```
 
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000) to see the magic.
+### 3. Run Locally
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) — everything runs from a single server.
+
+---
+
+## ☁️ Deploy to Vercel
+
+1. Push to GitHub
+2. Import the repo on [vercel.com](https://vercel.com)
+3. Add all the environment variables from `.env.local` in the Vercel dashboard
+4. Click **Deploy** — done!
+
+> No separate backend needed. All API routes live in `src/app/api/` as serverless functions.
 
 ---
 
 ## 📂 Project Structure
 
-```text
-├── backend/            # Express.js Server & Routes
-│   ├── models/         # Database Schemas (User, Book, Chat)
-│   ├── routes/         # API Endpoints (Auth, Books, AI)
-│   └── server.js       # Unified Entry Point
-├── src/
-│   ├── app/            # Next.js Pages & Layouts (App Router)
-│   ├── components/     # High-end Marketplace UI Components
-│   ├── context/        # Auth & Global State
-│   └── lib/            # Shared Utilities (API Client)
-└── package.json        # Project Orchestration
+```
+src/
+├── app/
+│   ├── api/              # Serverless API Routes (auth, books, chat, ai, requests)
+│   ├── auth/             # Login & Register page
+│   ├── book/[id]/        # Book detail page
+│   ├── chat/             # Real-time messaging UI
+│   ├── profile/          # User dashboard
+│   ├── search/           # AI search results
+│   └── sell/             # Create listing page
+├── components/           # Reusable UI components
+├── context/              # Auth context (global state)
+├── lib/                  # Utilities (api.js, mongodb.js, pusher.js, ai.js)
+└── models/               # Mongoose schemas (User, Book, Request, Chat)
 ```
 
 ---
 
 ## 🛡️ License
-Distributed under the MIT License. See `LICENSE` for more information.
+
+MIT License — see `LICENSE` for details.
 
 ---
+
 *Built with ❤️ for the student community.*
